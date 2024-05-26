@@ -1,93 +1,59 @@
 package io.github.elihuso.dispenseminingpaper;
 
+import io.github.elihuso.dispenseminingpaper.config.ConfigManager;
 import io.github.elihuso.dispenseminingpaper.listener.*;
-import io.github.elihuso.dispenseminingpaper.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.logging.Level;
 
 public final class DispenserMiningPaper extends JavaPlugin {
+    private static DispenserMiningPaper INSTANCE;
+    private final ConfigManager configManager;
 
-    String configFile = this.getDataFolder() + "/config";
-    String[] paths = {
-            "enabled",
-            "allowNegativeTools",
-            "plantCrops",
-            "breakBedrocks",
-            "processByDropper",
-            "allowBreak",
-            "allowPlace",
-            "allowProcess"
-    };
+    public DispenserMiningPaper() {
+        INSTANCE = this;
+
+        configManager = new ConfigManager(this);
+    }
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
-        for (String v : paths) {
-            loadSpecificConfig(configFile, v);
-        }
-        if (!Utils.LocalConfigs.enabled)
+        if (!configManager.getEnabled()) {
             return;
-        Bukkit.getPluginManager().registerEvents(new BlockBreakListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new BlockPlaceListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new BlockBoneMealListener(this), this);
-        if (Utils.LocalConfigs.plantCrops) Bukkit.getPluginManager().registerEvents(new BlockPlantListener(this), this);
-        if (Utils.LocalConfigs.processByDropper)
+        }
+
+        if (configManager.getFeatureBreaking()) {
+            Bukkit.getPluginManager().registerEvents(new BlockBreakListener(), this);
+        }
+
+        if (configManager.getFeaturePlacing()) {
+            Bukkit.getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        }
+
+        if (configManager.getFeaturePlacing()) {
+            Bukkit.getPluginManager().registerEvents(new BlockBoneMealListener(this), this);
+        }
+
+        if (configManager.getFeaturePlanting()) {
+            Bukkit.getPluginManager().registerEvents(new BlockPlantListener(this), this);
+        }
+
+        if (configManager.getFeatureProcessing()) {
             Bukkit.getPluginManager().registerEvents(new BlockProcessListener(this), this);
-        getLogger().log(Level.FINE, "Dispenser Mining Plugin Enabled");
+        }
+
+        getLogger().info("Loaded!");
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        getLogger().info("Bye~");
     }
 
-    public void loadSpecificConfig(@NotNull String file, @NotNull String path) {
-        FileConfiguration config = new YamlConfiguration();
-        try {
-            config.load(file);
-        } catch (Exception ex) {
-            for (String v : paths) {
-                config.set(v, true);
-            }
-            try {
-                config.save(file);
-            } catch (Exception e) {
-                getLogger().log(Level.WARNING, "Failed to load/save config file");
-            }
-        }
-        if (!config.isSet(path))
-            return;
-        boolean value = config.getBoolean(path);
-        switch (path) {
-            case "enabled":
-                Utils.LocalConfigs.enabled = value;
-                break;
-            case "allowNegativeTools":
-                Utils.LocalConfigs.allowNegativeTools = value;
-                break;
-            case "plantCrops":
-                Utils.LocalConfigs.plantCrops = value;
-                break;
-            case "breakBedrocks":
-                Utils.LocalConfigs.breakBedrocks = value;
-                break;
-            case "processByDropper":
-                Utils.LocalConfigs.processByDropper = value;
-                break;
-            case "allowBreak":
-                Utils.LocalConfigs.allowBreak = value;
-                break;
-            case "allowPlace":
-                Utils.LocalConfigs.allowPlace = value;
-                break;
-            case "allowProcess":
-                Utils.LocalConfigs.allowProcess = value;
-                break;
-        }
+    public static DispenserMiningPaper getInstance() {
+        return INSTANCE;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 }

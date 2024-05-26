@@ -1,0 +1,8 @@
+enabled: true
+features:
+  breaking: true
+  placing: true
+  processing: true
+  planting: true
+  breakBedrocks: false
+allowToolNegativeDuration: false

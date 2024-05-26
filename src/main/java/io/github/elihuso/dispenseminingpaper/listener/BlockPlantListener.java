@@ -72,9 +72,9 @@ public class BlockPlantListener implements Listener {
         if (!event.getBlock().getType().equals(Material.DISPENSER))
             return;
 
-        if (!Utils.LocalConfigs.allowPlace) {
-            return;
-        }
+//        if (!Utils.LocalConfigs.allowPlace) {
+//            return;
+//        }
 
         Block dispenserBlock = event.getBlock();
         ItemStack item = event.getItem();
@@ -134,9 +134,9 @@ public class BlockPlantListener implements Listener {
         if (!event.getBlock().getType().equals(Material.DISPENSER))
             return;
 
-        if (!Utils.LocalConfigs.allowPlace) {
-            return;
-        }
+//        if (!Utils.LocalConfigs.allowPlace) {
+//            return;
+//        }
 
         Block dispenserBlock = event.getBlock();
         ItemStack item = event.getItem();
@@ -181,9 +181,9 @@ public class BlockPlantListener implements Listener {
         if (!event.getBlock().getType().equals(Material.DISPENSER))
             return;
 
-        if (!Utils.LocalConfigs.allowPlace) {
-            return;
-        }
+//        if (!Utils.LocalConfigs.allowPlace) {
+//            return;
+//        }
 
         Block dispenserBlock = event.getBlock();
         ItemStack item = event.getItem();
@@ -232,9 +232,9 @@ public class BlockPlantListener implements Listener {
         if (!event.getBlock().getType().equals(Material.DISPENSER))
             return;
 
-        if (!Utils.LocalConfigs.allowPlace) {
-            return;
-        }
+//        if (!Utils.LocalConfigs.allowPlace) {
+//            return;
+//        }
 
         Block dispenserBlock = event.getBlock();
         ItemStack item = event.getItem();

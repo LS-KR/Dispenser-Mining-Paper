@@ -1,16 +1,12 @@
 package io.github.elihuso.dispenseminingpaper.listener;
 
-import io.github.elihuso.dispenseminingpaper.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Dispenser;
 import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -23,14 +19,17 @@ public class BlockBoneMealListener implements Listener {
 
     @EventHandler
     public void OnDispenseBoneMeal(BlockDispenseEvent event) {
-        if (event.isCancelled())
-            return;
-        if (!event.getBlock().getType().equals(Material.DISPENSER))
-            return;
-
-        if (!Utils.LocalConfigs.allowPlace) {
+        if (event.isCancelled()) {
             return;
         }
+
+        if (!event.getBlock().getType().equals(Material.DISPENSER)) {
+            return;
+        }
+
+//        if (!Utils.LocalConfigs.allowPlace) {
+//            return;
+//        }
 
         Block dispenserBlock = event.getBlock();
         Block target = dispenserBlock.getRelative(((Directional) dispenserBlock.getBlockData()).getFacing());
@@ -47,18 +46,18 @@ public class BlockBoneMealListener implements Listener {
         event.setCancelled(true);
         base.applyBoneMeal(BlockFace.UP);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            Dispenser dispenser = (Dispenser) dispenserBlock.getState();
-            Inventory inventory = dispenser.getInventory();
-
-            for (int i = 0; i < inventory.getSize(); ++i) {
-                ItemStack invItem = inventory.getItem(i);
-                if (item.isSimilar(invItem) && (invItem != null)) {
-                    invItem.setAmount(invItem.getAmount() - 1);
-                    inventory.setItem(i, invItem);
-                    break;
-                }
-            }
-        }, 1);
+//        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+//            Dispenser dispenser = (Dispenser) dispenserBlock.getState();
+//            Inventory inventory = dispenser.getInventory();
+//
+//            for (int i = 0; i < inventory.getSize(); ++i) {
+//                ItemStack invItem = inventory.getItem(i);
+//                if (item.isSimilar(invItem) && (invItem != null)) {
+//                    invItem.setAmount(invItem.getAmount() - 1);
+//                    inventory.setItem(i, invItem);
+//                    break;
+//                }
+//            }
+//        }, 1);
     }
 }

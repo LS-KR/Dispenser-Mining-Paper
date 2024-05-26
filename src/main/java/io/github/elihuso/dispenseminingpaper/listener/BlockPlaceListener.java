@@ -6,13 +6,11 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dropper;
 import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.plugin.Plugin;
 
 public class BlockPlaceListener implements Listener {
@@ -32,10 +30,6 @@ public class BlockPlaceListener implements Listener {
             return;
         }
 
-        if (!Utils.LocalConfigs.allowPlace) {
-            return;
-        }
-
         Block dropperBlock = event.getBlock();
         ItemStack item = event.getItem();
 
@@ -44,7 +38,7 @@ public class BlockPlaceListener implements Listener {
             Block base = target.getRelative(0, -1, 0);
             if (target.getType().isAir()) {
 
-                if (Utils.CouldPlace(item, base))
+                if (Utils.couldPlace(item, base))
                     event.setCancelled(true);
                 else
                     return;
